@@ -22,32 +22,37 @@
                     <div class="row mb-3">
                         <div class="col-md-6 col-sm-6">
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="isAustralian?" required
-                                    v-model="formData.isAustralian">
+                                <input type="checkbox" class="form-check-input" id="isAustralian?"
+                                    @blur="() => validateResident(true)" @input="() => validateResident(false)"
+                                    v-model="formData.isAustralian" />
                                 <label class="form-check-label" for="isAustralian">Australian Resident?</label>
+                                <div v-if="errors.isAustralian" class="text-danger">{{ errors.isAustralian }}</div>
                             </div>
 
                         </div>
                         <div class="col-md-6 col-sm-6">
                             <label for="gender" class="form-label">Gender</label><br>
-                            <select class="form-select" id="gender" required v-model="formData.gender">
+                            <select class="form-select" id="gender" @blur="() => validateGender(true)"
+                                @input="() => validateGender(false)" v-model="formData.gender">
                                 <option value="female">Female</option>
                                 <option value="male">Male</option>
                                 <option value="other">Other</option>
                             </select>
+                            <div v-if="errors.gender" class="text-danger">{{ errors.gender }}</div>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="reason" class="form-label">Reason For Joining</label><br>
-                        <textarea id="reason" class="form-control" rows="3" required
-                            v-model="formData.reason"></textarea><br>
+                        <textarea id="reason" class="form-control" rows="3" @blur="() => validateReason(true)"
+                            @input="() => validateReason(false)" v-model="formData.reason"></textarea><br>
+                        <div v-if="errors.reason" class="text-danger">{{ errors.reason }}</div>
                     </div>
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary me-2">Submit</button>
                         <button type="button" class="btn btn-secondary" @click="clearForm">Clear</button>
                     </div>
                 </form>
-                <div class="row mt-5" v-if="submittedCards.length">
+                <!-- <div class="row mt-5" v-if="submittedCards.length">
                     <div class="d-flex flex-wrap justify-content-start">
                         <div v-for="(card, index) in submittedCards" :key="index" class="card m-2"
                             style="width: 18rem;">
@@ -64,16 +69,24 @@
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div> -->
+                <DataTable :value="submittedCards" tableStyle="min-width: 50rem">
+                    <Column field="username" header="username"></Column>
+                    <Column field="password" header="Password"></Column>
+                    <Column field="isAustralian" header="Australian Resident"></Column>
+                    <Column field="gender" header="Gender"></Column>
+                    <Column field="reason" header="Reason"></Column>
+                </DataTable>
             </div>
         </div>
-
     </div>
 </template>
 
 <script setup>
 // Our logic will go here
 import { ref } from 'vue';
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
 
 const formData = ref({
     username: '',
@@ -109,7 +122,7 @@ const clearForm = () => {
 const errors = ref({
     username: null,
     password: null,
-    isAustralian: null,
+    isAustralian: false,
     gender: null,
     reason: null
 });
@@ -142,6 +155,29 @@ const validatePassword = (blur) => {
         if (blur) errors.value.password = "Password must contain at least one special character.";
     } else {
         errors.value.password = null;
+    }
+};
+
+const validateResident = (blur) => {
+    if (!formData.value.isAustralian) {
+        if (blur) errors.value.isAustralian = "Please click the button.";
+    } else {
+        errors.value.isAustralian = false;
+    }
+};
+const validateGender = (blur) => {
+    if (formData.value.gender == null || formData.value.gender == '') {
+        if (blur) errors.value.gender = "Please select your gender.";
+    } else {
+        errors.value.gender = null;
+    }
+};
+
+const validateReason = (blur) => {
+    if (formData.value.reason == null || formData.value.reason == '') {
+        if (blur) errors.value.reason = "Reason can not be empty.";
+    } else {
+        errors.value.reason = null;
     }
 };
 
