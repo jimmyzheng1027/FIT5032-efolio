@@ -1,5 +1,23 @@
 <template>
+    <!-- <div class="container">
+        <header class="d-flex justify-content-center py-3">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" aria-current="page">Home (Week 4)</a>
+                </li>
+                <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Contact us</a></li>
+            </ul>
+        </header>
+    </div> -->
+
     <div class="container mt-5">
+        <div>
+            <h1 class="text-center">🗄️ W5. Library Registration Form</h1>
+            <p class="text-center">
+                Let's build some more advanced features into our from.
+            </p>
+        </div>
         <div class="row">
             <div class="col-md-8 offset-md-2">
                 <h1 class="text-center">User Information Form</h1>
@@ -12,11 +30,31 @@
                             <div v-if="errors.username" class="text-danger">{{ errors.username }}</div>
                         </div>
                         <div class="col-md-6 col-sm-6">
+                            <label for="gender" class="form-label">Gender</label><br>
+                            <select class="form-select" id="gender" @blur="() => validateGender(true)"
+                                @input="() => validateGender(false)" v-model="formData.gender">
+                                <option value="female">Female</option>
+                                <option value="male">Male</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <div v-if="errors.gender" class="text-danger">{{ errors.gender }}</div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6 col-sm-6">
                             <label for="password" class="form-label">Password:</label>
                             <input type="password" class="form-control" id="password"
                                 @blur="() => validatePassword(true)" @input="() => validatePassword(false)"
                                 v-model="formData.password" />
                             <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <label for="confirm-password" class="form-label">Confirm password</label>
+                            <input type="password" class="form-control" id="confirm-password"
+                                @blur="() => validateConfirmPassword(true)" v-model="formData.confirmPassword" />
+                            <div v-if="errors.confirmPassword" class="text-danger">{{ errors.confirmPassword }}
+                            </div>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -30,22 +68,23 @@
                             </div>
 
                         </div>
-                        <div class="col-md-6 col-sm-6">
-                            <label for="gender" class="form-label">Gender</label><br>
-                            <select class="form-select" id="gender" @blur="() => validateGender(true)"
-                                @input="() => validateGender(false)" v-model="formData.gender">
-                                <option value="female">Female</option>
-                                <option value="male">Male</option>
-                                <option value="other">Other</option>
-                            </select>
-                            <div v-if="errors.gender" class="text-danger">{{ errors.gender }}</div>
-                        </div>
+
                     </div>
                     <div class="mb-3">
                         <label for="reason" class="form-label">Reason For Joining</label><br>
                         <textarea id="reason" class="form-control" rows="3" @blur="() => validateReason(true)"
                             @input="() => validateReason(false)" v-model="formData.reason"></textarea><br>
                         <div v-if="errors.reason" class="text-danger">{{ errors.reason }}</div>
+                        <div v-if="message.reason">
+                            <p style="color: green;">{{ message.reason }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                            <label for="suburb" class="form-label">Suburb:</label>
+                            <input type="text" class="form-control" id="suburb"
+                                @blur="() => validateSuburb(true)" @input="() => validateSuburb(false)"
+                                v-model="formData.suburb" />
+                            <div v-if="errors.suburb" class="text-danger">{{ errors.suburb }}</div>
                     </div>
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary me-2">Submit</button>
@@ -76,6 +115,7 @@
                     <Column field="isAustralian" header="Australian Resident"></Column>
                     <Column field="gender" header="Gender"></Column>
                     <Column field="reason" header="Reason"></Column>
+                    <Column field="suburb" header="Suburb"></Column>
                 </DataTable>
             </div>
         </div>
@@ -87,13 +127,16 @@
 import { ref } from 'vue';
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
+import Message from 'primevue/message';
 
 const formData = ref({
     username: '',
     password: '',
+    confirmPassword: '',
     isAustralian: false,
     reason: '',
-    gender: ''
+    gender: '',
+    suburb: 'Clayton'
 });
 
 const submittedCards = ref([]);
@@ -115,15 +158,22 @@ const clearForm = () => {
         password: '',
         isAustralian: false,
         reason: '',
-        gender: ''
+        gender: '',
+        suburb: ''
     };
 };
 
 const errors = ref({
     username: null,
     password: null,
+    confirmPassword: null,
     isAustralian: false,
     gender: null,
+    reason: null,
+    suburb: null
+});
+
+const message = ref({
     reason: null
 });
 
@@ -158,6 +208,14 @@ const validatePassword = (blur) => {
     }
 };
 
+const validateConfirmPassword = (blur) => {
+    if (formData.value.password !== formData.value.confirmPassword) {
+        if (blur) errors.value.confirmPassword = 'Passwords do not match.'
+    } else {
+        errors.value.confirmPassword = null
+    }
+}
+
 const validateResident = (blur) => {
     if (!formData.value.isAustralian) {
         if (blur) errors.value.isAustralian = "Please click the button.";
@@ -173,11 +231,24 @@ const validateGender = (blur) => {
     }
 };
 
+const validateSuburb = (blur) => {
+    if (formData.value.suburb == null || formData.value.suburb == '') {
+        if (blur) errors.value.suburb = "suburb can not be empty.";
+    } else {
+        errors.value.suburb = null;
+    }
+};
+
 const validateReason = (blur) => {
     if (formData.value.reason == null || formData.value.reason == '') {
         if (blur) errors.value.reason = "Reason can not be empty.";
     } else {
         errors.value.reason = null;
+    }
+    if (formData.value.reason.includes('friend') || formData.value.reason.includes('Friend')) {
+        message.value.reason = "Great to have a friend";
+    } else {
+        message.value.reason = null;
     }
 };
 
