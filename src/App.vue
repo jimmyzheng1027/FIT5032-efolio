@@ -12,14 +12,15 @@
 </template>
 
 <script>
-import Bheader from './components/Bheader.vue';
+import BHeader from './components/BHeader.vue';
+
 
 import CountBookAPI from './views/CountBookAPI.vue';
 
 export default {
   name: 'App',
   components: {
-    Bheader,
+    BHeader,
     CountBookAPI,
   },
   computed: {

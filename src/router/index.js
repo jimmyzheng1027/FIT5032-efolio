@@ -71,10 +71,8 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes: [
-    // your routes here
-  ]
-})
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes
+});
 
 export default router
