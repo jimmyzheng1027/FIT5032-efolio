@@ -1,7 +1,7 @@
 <template>
   <div class="main-container">
     <header v-if="showHeader">
-      <BHeader />
+      <Bheader />
     </header>
     <main class="main-box">
       <!-- <LibraryRegistrationForm /> -->
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import BHeader from './components/BHeader.vue';
+import Bheader from './components/Bheader.vue';
 
 
 import CountBookAPI from './views/CountBookAPI.vue';
@@ -20,7 +20,7 @@ import CountBookAPI from './views/CountBookAPI.vue';
 export default {
   name: 'App',
   components: {
-    BHeader,
+    Bheader,
     CountBookAPI,
   },
   computed: {
