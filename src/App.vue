@@ -6,14 +6,16 @@
     <main class="main-box">
       <!-- <LibraryRegistrationForm /> -->
       <!-- <JSONLab /> -->
-      <router-view></router-view> 
+      <router-view></router-view>
     </main>
   </div>
 </template>
 
 <script>
-import BHeader from './components/BHeader.vue';
-import CountBookAPI from './views/CountBookAPI.vue'; 
+// import BHeader from './components/BHeader.vue';
+import BHeader from './components/Bheader.vue';
+
+import CountBookAPI from './views/CountBookAPI.vue';
 
 export default {
   name: 'App',
@@ -23,7 +25,7 @@ export default {
   },
   computed: {
     showHeader() {
-      return this.$route.name !== 'CountBookAPI'; 
+      return this.$route.name !== 'CountBookAPI';
     },
   },
 };
