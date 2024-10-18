@@ -13,7 +13,7 @@
 
     <div class="container mt-5">
         <div>
-            <h1 class="text-center">🗄️ W5. Library Registration Form</h1>
+            <h1 class="text-center">🗄️ W9. Library Registration Form</h1>
             <p class="text-center">
                 Let's build some more advanced features into our from.
             </p>
@@ -108,7 +108,7 @@
                         </div>
                     </div>
                 </div> -->
-                <DataTable :value="submittedCards" tableStyle="min-width: 50rem">
+                <DataTable :value="submittedCards" tableStyle="min-width: 50rem" class="mt-5">
                     <Column field="username" header="username"></Column>
                     <Column field="password" header="Password"></Column>
                     <Column field="isAustralian" header="Australian Resident"></Column>
@@ -126,7 +126,7 @@
 import { ref } from 'vue';
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
-import Message from 'primevue/message';
+// import Message from 'primevue/message';
 
 const formData = ref({
     username: '',
@@ -254,6 +254,11 @@ const validateReason = (blur) => {
 </script>
 
 <style scoped>
+.container {
+    max-width: 900px;
+    margin: auto;
+}
+
 .card {
     border: 1px solid #ccc;
     border-radius: 10px;

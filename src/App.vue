@@ -1,32 +1,51 @@
-<script setup>
-import JSON from './components/JSON.vue'
-import Form from './components/Form.vue'
-import Bheader from './components/Bheader.vue';
-
-</script>
-
 <template>
   <div class="main-container">
-    <header>
-      <Bheader />
+    <header v-if="showHeader">
+      <BHeader />
     </header>
-
     <main class="main-box">
-      <router-view></router-view>
+      <!-- <LibraryRegistrationForm /> -->
+      <!-- <JSONLab /> -->
+      <router-view></router-view> 
     </main>
   </div>
 </template>
 
+<script>
+import BHeader from './components/BHeader.vue';
+import CountBookAPI from './views/CountBookAPI.vue'; 
 
-<style>
-.highlighted-author {
-  font-weight: bold;
-  color: blue;
+export default {
+  name: 'App',
+  components: {
+    BHeader,
+    CountBookAPI,
+  },
+  computed: {
+    showHeader() {
+      return this.$route.name !== 'CountBookAPI'; 
+    },
+  },
+};
+</script>
+
+<style scoped>
+/*
+header {
+  line-height: 1.5;
 }
 
-.main-box {
-  display: grid;
-  place-items: center;
-
+.logo {
+  display: block;
+  margin: 0 auto 2rem;
 }
+
+@media (min-width: 1024px) {
+  header {
+    display: flex;
+    place-items: center;
+    padding-right: calc(var(--section-gap) / 2);
+  }
+}
+*/
 </style>
